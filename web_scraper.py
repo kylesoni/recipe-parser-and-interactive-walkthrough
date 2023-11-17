@@ -2,6 +2,7 @@ import bs4
 import requests
 from bs4 import BeautifulSoup
 import re
+from recipe import Recipe
 
 # receive URL input from user
 url = input("Hello! I can help walk you through a recipe from AllRecipes.com. Please enter a URL:")
@@ -25,34 +26,38 @@ directions = steps_results.find_all("p", class_="comp mntl-sc-block mntl-sc-bloc
 for step in directions:
     steps.append(step.get_text().strip(' \n\r\t'))
 
-# get user input for ingredients or steps
-print("Alright! Let's walk through " + title + ". What do you want to do?\n[1] Go over ingredients list\n[2] Go over recipe steps")
-user_input = input()
-if user_input.__contains__('1'):
-    print(ingredient_list)
-elif user_input.__contains__('2'):
-    print(steps)
-else:
-    print("Sorry, I didn't get that. Can you input a selection of 1 or 2?")
+RECIPE = Recipe(ingredient_list, steps)
 
-# regex for external info
-query_pattern = '(What is ([^\?]*)|How do I ([^\?]*))'
+print(RECIPE.test_ingredients())
 
-i = True
-while i:
-    print("What would you like to do now?")
-    user_input = input()
-    # 
-    query = re.match(query_pattern, user_input)
-    if query:
-        search = user_input.strip().replace(' ','+')
-        url = 'https://google.com/search?q=' + search
-        print('Here is what I found: ' + url)
+# # get user input for ingredients or steps
+# print("Alright! Let's walk through " + title + ". What do you want to do?\n[1] Go over ingredients list\n[2] Go over recipe steps")
+# user_input = input()
+# if user_input.__contains__('1'):
+#     print(ingredient_list)
+# elif user_input.__contains__('2'):
+#     print(steps)
+# else:
+#     print("Sorry, I didn't get that. Can you input a selection of 1 or 2?")
+
+# # regex for external info
+# query_pattern = '(What is ([^\?]*)|How do I ([^\?]*))'
+
+# i = True
+# while i:
+#     print("What would you like to do now?")
+#     user_input = input()
+#     # 
+#     query = re.match(query_pattern, user_input)
+#     if query:
+#         search = user_input.strip().replace(' ','+')
+#         url = 'https://google.com/search?q=' + search
+#         print('Here is what I found: ' + url)
 
 
 
-ing_name = []
-ing_quantity = []
-ing_measurement = []
-tools = []
-cook_methods = []
+# ing_name = []
+# ing_quantity = []
+# ing_measurement = []
+# tools = []
+# cook_methods = []
