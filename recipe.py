@@ -22,3 +22,6 @@ class Recipe:
             print("Amount: " + self.ingredients[i].amount)
             print("Unit: " + self.ingredients[i].unit)
             print("Ing: " + self.ingredients[i].ingredient)
+            print("Prep: " + self.ingredients[i].prep)
+            print("Description: " + self.ingredients[i].desc)
+            print("\n")
