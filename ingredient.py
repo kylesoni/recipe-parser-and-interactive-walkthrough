@@ -85,9 +85,15 @@ class Ingredient:
 common_units = {
     'kg': 'kg',
     'lb.': 'lb',
+    'pound': 'pound',
+    'pounds': 'pounds',
     'g': 'g',
+    'gram': 'g',
+    'grams': 'g',
     'oz.': 'oz',
     'oz': 'oz',
+    'ounce': 'oz',
+    'ounces': 'oz',
 
     'inches': 'in',
     'in': 'in',
@@ -105,7 +111,10 @@ common_units = {
     'cup' : 'cup',
     'cups' : 'cups',
 
-    'sheet': 'sheet'
+    'sheet': 'sheet',
+    'package': 'package',
+    'clove': 'clove',
+    'cloves': 'cloves',
     }
 
 common_prep = {

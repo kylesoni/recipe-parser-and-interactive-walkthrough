@@ -32,25 +32,65 @@ RECIPE = Recipe(ingredient_list, steps)
 print("Alright! Let's walk through " + title + ". What do you want to do?\n[1] Go over ingredients list\n[2] Go over recipe steps")
 user_input = input()
 if user_input.__contains__('1'):
-    print(ingredient_list)
+    print("Here is the ingredient list:\n")
+    for ing in RECIPE.ingredients:
+        print(ing.amount + " " + ing.unit + " " + ing.ingredient)
 elif user_input.__contains__('2'):
-    print(steps)
+    for step in RECIPE.steps:
+        print(step.steps)
 else:
     print("Sorry, I didn't get that. Can you input a selection of 1 or 2?")
-
-# regex for external info
-query_pattern = '(What is ([^\?]*)|How do I ([^\?]*))'
 
 i = True
 while i:
     print("What would you like to do now?")
     user_input = input()
-    # 
-    query = re.match(query_pattern, user_input)
+    user_input = re.sub(r'[,.!?@#$%^&*_~]', '', user_input)
+    
+    # if it's a Google question
+    google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
+    query = re.match(google_query_pattern, user_input)
     if query:
         search = user_input.strip().replace(' ','+')
         url = 'https://google.com/search?q=' + search
         print('Here is what I found: ' + url)
+    
+    # if it's an ingredient amount question
+    ing_query_pattern = 'How much |How many | do I need'
+    query = re.match(ing_query_pattern, user_input)
+    if query:
+        query = re.split(ing_query_pattern, user_input)
+        for ing in RECIPE.ingredients:
+            if re.match(ing.ingredient, query[1]):
+                print((ing.amount) + " " + (ing.unit))
+                break
+            # elseif made it to last ingredient and still no match:
+            #     print("Ingredient not found")
+    
+    # if it's a list request
+    list_query_pattern = 'Show me the '
+    list_options = ['ingredients list', 'recipe list']
+    query = re.match(list_query_pattern, user_input)
+    if query:
+        query = re.split(list_query_pattern, user_input)
+        print(query[1])
+        print(list_options[0])
+        for list in list_options:
+            if re.match(query[1], list_options[0]):
+                print("Here is the ingredient list:\n")
+                for ing in RECIPE.ingredients:
+                    print(ing.amount + " " + ing.unit + " " + ing.ingredient)
+            elif re.match(query[1], list[1]):
+                print("Here is the recipe list:\n")
+                for step in RECIPE.steps:
+                    print(step.steps)
+
+    # if user wants to quit
+    quit_pattern = 'quit'
+    query = re.match(quit_pattern, user_input)
+    if query:
+        print("Thanks for walking through the recipe with me. Goodbye!")
+        break
 
 
 
