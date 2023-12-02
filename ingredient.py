@@ -1,5 +1,9 @@
 import re
 import copy
+import spacy
+
+# Get syntactic parser
+spacy_model = spacy.load("en_core_web_sm")
 
 class Ingredient:
 
@@ -55,23 +59,46 @@ class Ingredient:
                         self.ingredient += " " + word
 
     def get_prep_and_descriptor(self):
-        prep_words = []
+        prep_words = ""
+        prep_candidates = []
         desc_words = []
         ingredient_words = self.ingredient.split()
         actual_ingredient_words = copy.deepcopy(ingredient_words)
+        doc = spacy_model(self.ingredient)
 
         for word in ingredient_words:
+            word = re.sub(r'[^\w\s]', '', word)
             if word in common_prep:
-                prep_words.append(common_prep[word])
-                actual_ingredient_words.remove(word)
+                for token in doc:
+                    if token.text == word:
+                        tracker = [token]
+                        while len(tracker) > 0:
+                            t = tracker.pop()
+                            for child in t.children:
+                                tracker.append(child)
+                                if child.dep_ != "dobj" and child.pos_ != "VERB" and child.dep_ != "nsubj" and child.head.dep_ != "dobj":
+                                    if child.text not in prep_candidates:
+                                        prep_candidates.append(child.text)
+                            if t.text not in prep_candidates:
+                                prep_candidates.append(common_prep[token.text])
             elif word in common_descriptor:
-                desc_words.append(common_descriptor[word])
+                for token in doc:
+                    if token.text == word:
+                        for child in token.children:
+                            if child.pos_ != "NOUN" and child.pos_ != "VERB":
+                                desc_words.append(child.text)
+                                actual_ingredient_words.remove(child.text)
                 actual_ingredient_words.remove(word)
 
-        if len(prep_words) > 0:
-            self.prep = prep_words[0]
-        for i in range(1, len(prep_words)):
-            self.prep += ", " + prep_words[i]
+        for word in ingredient_words:
+            raw_word = re.sub(r'[,.!?@#$%^&*_~]', '', word)
+            if raw_word in prep_candidates:
+                if prep_words == "":
+                    prep_words = raw_word
+                else:
+                    prep_words += " " + raw_word
+                actual_ingredient_words.remove(word)
+        self.prep = prep_words
 
         if len(desc_words) > 0:
             self.desc = desc_words[0]
@@ -119,17 +146,12 @@ common_units = {
 
 common_prep = {
     'diced': 'diced',
-    'diced,': 'diced',
     'cubed': 'cubed',
-    'cubed,': 'cubed',
     'beaten': 'beaten',
-    'beaten,': 'beaten',
     'peeled': 'peeled',
-    'peeled,': 'peeled',
     'softened': 'softened',
-    'softened,': 'softened',
     'chopped': 'chopped',
-    'chopped, ': 'chopped'
+    'cut' : 'cut'
 }
 
 common_descriptor = {
@@ -140,9 +162,19 @@ common_descriptor = {
 }
 
 
-#test_ingredient = Ingredient("1 sheet nori seaweed, cut into squares")
+test_ingredient = Ingredient("4 cups peeled, cubed sweet potatoes")
 
-#print(test_ingredient.ingredient)
-#print(test_ingredient.amount)
-#print(test_ingredient.unit)
+# print(test_ingredient.ingredient)
+# print(test_ingredient.amount)
+# print(test_ingredient.unit)
+# print(test_ingredient.prep)
+# print(test_ingredient.desc)
 
+# doc = spacy_model("4 cups peeled, cubed sweet potatoes")
+
+# for token in doc:
+#     # print(token.text, token.dep_, token.head.text, token.head.pos_,
+#     #         [child for child in token.children])
+#     # if token.text == "squares":
+#     #     print(token.dep_)
+#     print(token.text)
