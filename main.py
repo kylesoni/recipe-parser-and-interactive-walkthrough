@@ -8,7 +8,7 @@ import spacy
 # Get syntactic parser
 spacy_model = spacy.load("en_core_web_sm")
 
-url = "https://www.allrecipes.com/easy-5-ingredient-chili-recipe-7508143"
+url = "https://www.allrecipes.com/chicken-fra-diavolo-recipe-8383615"
 page = requests.get(url)
 soup = BeautifulSoup(page.content, 'html.parser')
 title = soup.title.text
@@ -41,6 +41,5 @@ test_recipe = Recipe(ingredient_list, steps)
 # print(test_recipe.progress_step().text)
 # print(test_recipe.ingredients[-1].ingredient)
 
-veggie_recipe = transformations.meat_to_vegetarian(test_recipe)
-#veggie_recipe.test_ingredients()
-veggie_recipe.test_steps()
+veggie_recipe = transformations.meat_to_vegan(test_recipe)
+veggie_recipe.test_ingredients()
