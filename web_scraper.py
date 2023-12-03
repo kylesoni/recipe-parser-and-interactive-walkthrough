@@ -36,7 +36,7 @@ if user_input.__contains__('1'):
     for key in RECIPE.ingredient_groups:
         print(key + ": ")
         for ing in RECIPE.ingredient_groups[key]:
-            print(ing)
+            print(ing.raw)
         print("")
 elif user_input.__contains__('2'):
     for step in RECIPE.steps:

@@ -22,12 +22,17 @@ class Recipe:
                 ing = Ingredient(scraped_ingredients[i])
                 self.ingredients.append(ing)
                 if current_category in self.ingredient_groups:
-                    self.ingredient_groups[current_category].append(ing.raw)
+                    self.ingredient_groups[current_category].append(ing)
                 else:
-                    self.ingredient_groups[current_category] = [ing.raw]
+                    self.ingredient_groups[current_category] = [ing]
 
+        current_category = "generic"
         for i in range(len(scraped_steps)):
-            self.steps.append(Step(scraped_steps[i], self.ingredients))
+            for key in list(self.ingredient_groups.keys()):
+                if key in scraped_steps[i].lower():
+                    current_category = key
+            if current_category in self.ingredient_groups:
+                self.steps.append(Step(scraped_steps[i], self.ingredient_groups[current_category]))
 
     def progress_step(self):
         if self.current_step + 1 < len(self.steps):
