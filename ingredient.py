@@ -13,7 +13,8 @@ class Ingredient:
             raise(Exception("Expected ingredient information to be a string."))
 
         ingredient_words = ingredient_info.split()
-
+        
+        self.raw = ingredient_info
         self.amount = str(0)
         self.get_amount(ingredient_info)
         self.unit = ""
@@ -97,7 +98,8 @@ class Ingredient:
                     prep_words = raw_word
                 else:
                     prep_words += " " + raw_word
-                actual_ingredient_words.remove(word)
+                if word in actual_ingredient_words:
+                    actual_ingredient_words.remove(word)
         self.prep = prep_words
 
         if len(desc_words) > 0:

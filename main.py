@@ -16,8 +16,13 @@ body = soup.body.text
 ingredient_list = []
 ing_results = soup.find(id="mntl-structured-ingredients_1-0")
 list_of_ing = ing_results.find_all("li")
-for list in list_of_ing:
+ing_headings = soup.find(id="mntl-lrs-ingredients_1-0")
+list_of_headings = ing_headings.find_all(["p"])
+# for list in list_of_ing:
+#     ingredient_list.append(list.get_text().strip(' \n\r\t'))
+for list in list_of_headings:
     ingredient_list.append(list.get_text().strip(' \n\r\t'))
+#print(ingredient_list)
 
 steps = []
 steps_results = soup.find(id="recipe__steps_1-0")
@@ -29,6 +34,7 @@ for step in directions:
 #print(scraper.instructions_list())
 
 test_recipe = Recipe(ingredient_list, steps)
-test_recipe.test_ingredients()
+test_recipe.test_ingredient_groups()
+# test_recipe.test_steps()
 # print(test_recipe.progress_step().text)
 # print(test_recipe.ingredients[-1].ingredient)

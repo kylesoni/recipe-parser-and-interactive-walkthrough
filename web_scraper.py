@@ -14,8 +14,8 @@ body = soup.body.text
 
 # get ingredients
 ingredient_list = []
-ing_results = soup.find(id="mntl-structured-ingredients_1-0")
-list_of_ing = ing_results.find_all("li")
+ing_results = soup.find(id="mntl-lrs-ingredients_1-0")
+list_of_ing = ing_results.find_all(["p"])
 for list in list_of_ing:
     ingredient_list.append(list.get_text().strip(' \n\r\t'))
 
@@ -33,8 +33,11 @@ print("Alright! Let's walk through " + title + ". What do you want to do?\n[1] G
 user_input = input()
 if user_input.__contains__('1'):
     print("Here is the ingredient list:\n")
-    for ing in RECIPE.ingredients:
-        print(ing.amount + " " + ing.unit + " " + ing.ingredient)
+    for key in RECIPE.ingredient_groups:
+        print(key + ": ")
+        for ing in RECIPE.ingredient_groups[key]:
+            print(ing)
+        print("")
 elif user_input.__contains__('2'):
     for step in RECIPE.steps:
         print(step.steps)
