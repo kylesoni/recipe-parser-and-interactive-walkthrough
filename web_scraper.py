@@ -52,14 +52,6 @@ while i:
     user_input = input()
     user_input = re.sub(r'[,.!?@#$%^&*_~]', '', user_input)
     
-    # if it's a Google question
-    google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
-    query = re.match(google_query_pattern, user_input)
-    if query:
-        search = user_input.strip().replace(' ','+')
-        url = 'https://google.com/search?q=' + search
-        print('Here is what I found: ' + url)
-    
     # if it's a list request
     ing_list_pattern = ['ingredients list', '1']
     rec_list_pattern = ['recipe steps', '2']
@@ -127,21 +119,55 @@ while i:
                 j += 10
             i += 1
             j += 1
-            if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)-1):
-                print("Ingredient not found")
+            if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)):
+                print("Ingredient not found.")
 
     # if it's a tools question
     tools_query_pattern = 'tools'
     if user_input.__contains__(tools_query_pattern):
         print('Here are the tools needed in this step:')
-        print('These are the prep tools: ' + str(RECIPE.steps[RECIPE.current_step].tools["prep"]).strip("['']"))
-        print('These are the cooking tools: ' + str(RECIPE.steps[RECIPE.current_step].tools["step"]).strip("['']"))
+        print('These are the prep tools: ' + str(RECIPE.steps[RECIPE.current_step].tools["prep"]).strip("[]").replace("'",""))
+        print('These are the cooking tools: ' + str(RECIPE.steps[RECIPE.current_step].tools["step"]).strip("['']").replace("'",""))
+
+    # if it's a methods question
+    cook_query_pattern = '(cook|cooking|cooking method|method)'
+    query = re.match(cook_query_pattern, user_input)
+    if query:
+        if len(RECIPE.steps[RECIPE.current_step].methods) == 0:
+            print("There are no cooking methods involved in this step.")
+        else:
+            print('Here are the cooking methods involved with this step:')
+            print(str(RECIPE.steps[RECIPE.current_step].methods).strip("[]").replace("'",""))
 
     # if it's a prep question
-    prep_query_pattern = '(prep|prepare|preparation)'
-    if user_input.__contains__(prep_query_pattern):
-        print('Here is what you need to prepare the ingredients for this step:')
+    prep_query_pattern = '((H|h)ow do I prep |(H|h)ow do I prepare |(H|h)ow do I prepare for |(W|w)hat is the needed preparation for )'
+    query = re.match(prep_query_pattern, user_input)
+    if query:
+        query = re.split(prep_query_pattern, user_input)
+        i = 0
+        j = 0
+        for ing in RECIPE.steps[RECIPE.current_step].ingredients:
+            if re.match(RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient, query[len(query)-1]) != None:
+                if len(RECIPE.steps[RECIPE.current_step].ingredients[i].prep) == 0:
+                    print('There is no preparation needed for ' + query[len(query)-1] + '.')
+                else:
+                    print('Here\'s how ' + query[len(query)-1] + ' need(s) to be prepped:')
+                    print(RECIPE.steps[RECIPE.current_step].ingredients[i].prep)
+                j += 10
+            i += 1
+            j += 1
+            if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)):
+                print("Ingredient not found")
 
+    # if it's a Google question
+    google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
+    query = re.match(google_query_pattern, user_input)
+    if query:
+        if re.search('prep', user_input):
+            continue
+        search = user_input.strip().replace(' ','+')
+        url = 'https://google.com/search?q=' + search
+        print('Here is what I found: ' + url)
 
     # if user wants to quit
     quit_pattern = '((Q|q)uit|(S|s)top)'
