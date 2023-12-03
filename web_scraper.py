@@ -40,7 +40,7 @@ if user_input.__contains__('1'):
         print("")
 elif user_input.__contains__('2'):
     for step in RECIPE.steps:
-        print(step.steps)
+        print(step.text)
 else:
     print("Sorry, I didn't get that. Can you input a selection of 1 or 2?")
 
@@ -86,7 +86,7 @@ while i:
             elif re.match(query[1], list[1]):
                 print("Here is the recipe list:\n")
                 for step in RECIPE.steps:
-                    print(step.steps)
+                    print(step.text)
 
     # if user wants to quit
     quit_pattern = 'quit'
