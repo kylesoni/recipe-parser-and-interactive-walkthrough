@@ -10,7 +10,7 @@ class Step:
         
         self.text = step_info
         self.ingredients = []
-        self.tools = []
+        self.tools = {"step" : [], "preparation" : []}
         self.methods = []
         self.time = {"Hard" : "", "Soft" : ""}
         self.settings = {"Stove" : "", "Oven" : ""}
@@ -48,8 +48,8 @@ class Step:
                     flag = False
             if flag:
                 tool = common_tools[word]
-                if tool not in self.tools:
-                    self.tools.append(tool)
+                if tool not in self.tools["step"]:
+                    self.tools["step"].append(tool)
     
     def get_methods(self):
         raw = self.text.lower()
