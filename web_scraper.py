@@ -59,7 +59,7 @@ while i:
         print('Here is what I found: ' + url)
     
     # if it's an ingredient amount question
-    ing_query_pattern = 'How much |How many | do I need'
+    ing_query_pattern = '((H|h)ow much |(H|h)ow many | do I need)'
     query = re.match(ing_query_pattern, user_input)
     if query:
         query = re.split(ing_query_pattern, user_input)
@@ -71,25 +71,47 @@ while i:
             #     print("Ingredient not found")
     
     # if it's a list request
-    list_query_pattern = 'Show me the '
-    list_options = ['ingredients list', 'recipe list']
-    query = re.match(list_query_pattern, user_input)
-    if query:
-        query = re.split(list_query_pattern, user_input)
-        print(query[1])
-        print(list_options[0])
-        for list in list_options:
-            if re.match(query[1], list_options[0]):
+    # list_query_pattern = '((S|s)how me the |(G|g)o over the |1|2)'
+    ing_list_pattern = ['ingredients list', '1']
+    rec_list_pattern = ['recipe steps', '2']
+
+    if user_input.__contains__(ing_list_pattern[0])|user_input.__contains__(ing_list_pattern[1]):
+        for pattern in ing_list_pattern:
+            if re.search(pattern, user_input):
                 print("Here is the ingredient list:\n")
-                for ing in RECIPE.ingredients:
-                    print(ing.amount + " " + ing.unit + " " + ing.ingredient)
-            elif re.match(query[1], list[1]):
-                print("Here is the recipe list:\n")
+                for key in RECIPE.ingredient_groups:
+                    print(key + ": ")
+                    for ing in RECIPE.ingredient_groups[key]:
+                        print(ing.raw)
+                    print("")
+    if user_input.__contains__(rec_list_pattern[0])|user_input.__contains__(rec_list_pattern[1]):
+        for pattern in rec_list_pattern:
+            if re.search(pattern, user_input):
+                print("Here are the recipe steps:\n")
                 for step in RECIPE.steps:
                     print(step.text)
 
+    # first step
+    start_query_pattern = 'start'
+    if user_input.__contains__(start_query_pattern):
+        print('Alright, let\'s start! Here is the first step:')
+        print(RECIPE.progress_step().text)
+
+    # current step
+    curstep_query_pattern = '(repeat|step again)'
+    if user_input.__contains__(curstep_query_pattern):
+        print('Here is the current step:')
+        print(RECIPE.steps[RECIPE.current_step].text)
+
+    # next step
+    nextstep_query_pattern = '(next|next step)'
+    query = re.match(nextstep_query_pattern, user_input)
+    if query:
+        print('Here is the next step:')
+        print(RECIPE.progress_step().text)
+
     # if user wants to quit
-    quit_pattern = 'quit'
+    quit_pattern = '(quit|stop)'
     query = re.match(quit_pattern, user_input)
     if query:
         print("Thanks for walking through the recipe with me. Goodbye!")
