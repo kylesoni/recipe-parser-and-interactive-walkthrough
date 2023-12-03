@@ -65,4 +65,5 @@ class Recipe:
             print("Ingredients: " + str(self.steps[i].ingredients))
             print("Tools: " + str(self.steps[i].tools))
             print("Methods: " + str(self.steps[i].methods))
+            print("Time: " + self.steps[i].time["Hard"] + " or " + self.steps[i].time["Soft"])
             print("")

@@ -151,7 +151,9 @@ common_prep = {
     'peeled': 'peeled',
     'softened': 'softened',
     'chopped': 'chopped',
-    'cut' : 'cut'
+    'cut' : 'cut',
+    'sliced' : 'sliced',
+    'minced' : 'minced'
 }
 
 common_descriptor = {

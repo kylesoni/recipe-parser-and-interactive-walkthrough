@@ -1,4 +1,8 @@
 import re
+import spacy
+
+# Get syntactic parser
+spacy_model = spacy.load("en_core_web_sm")
 
 class Step:
 
@@ -8,11 +12,12 @@ class Step:
         self.ingredients = []
         self.tools = []
         self.methods = []
-        self.time = (0, "")
+        self.time = {"Hard" : "", "Soft" : ""}
 
         self.get_ingredients(r_ingredients)
         self.get_tools()
         self.get_methods()
+        self.get_time()
 
     def get_ingredients(self, ing_list):
         raw = self.text.lower()
@@ -62,7 +67,67 @@ class Step:
                 for tool in tools_for_methods[word]:
                     if tool not in self.tools:
                         self.tools.append(tool)
+    
+    def get_time(self):
+        time_candidates = []
+        doc = spacy_model(self.text)
+        for word in self.text.split():
+            word = re.sub(r'[^\w\s]', '', word)
+            if word in common_time:
+                for token in doc:
+                    if token.text == word:
+                        tracker = [token]
+                        while len(tracker) > 0:
+                            t = tracker.pop()
+                            for child in t.children:
+                                tracker.append(child)
+                                if child.pos_ != "VERB":
+                                    if child.text not in time_candidates:
+                                        time_candidates.append(child.text)
+                            if t.text not in time_candidates:
+                                time_candidates.append(token.text)
 
+        text_words = re.sub(r'[^\w\s]', '', self.text).split()
+        for i, word in enumerate(text_words):
+            if i > 0 and i < len(text_words) - 1:
+                if text_words[i - 1] not in time_candidates and text_words[i + 1] not in time_candidates:
+                    continue
+            if word in time_candidates:
+                if self.time["Hard"] == "":
+                    self.time["Hard"] = word
+                else:
+                    self.time["Hard"] += " " + word
+
+        if self.time["Hard"] != "":
+            time_candidates = []
+            for word in self.text.split():
+                word = re.sub(r'[^\w\s]', '', word)
+                if word == "until":
+                    for token in doc:
+                        if token.text == word:
+                            tracker = [token]
+                            if len([child for child in token.children]) == 0:
+                                time_candidates.append(word)
+                                time_candidates.append(str(token.head))
+                            else:
+                                while len(tracker) > 0:
+                                    t = tracker.pop()
+                                    for child in t.children:
+                                        tracker.append(child)
+                                        if child.pos_ != "VERB":
+                                            if child.text not in time_candidates:
+                                                time_candidates.append(child.text)
+                                    if t.text not in time_candidates:
+                                        time_candidates.append(token.text)
+
+            text_words = re.sub(r'[^\w\s]', '', self.text).split()
+            for i, word in enumerate(text_words):
+                if word in time_candidates:
+                    if self.time["Soft"] == "":
+                        self.time["Soft"] = word
+                    else:
+                        self.time["Soft"] += " " + word
+                
 # partly from Wikipedia:  
 common_tools = {
     "baster" : "baster",
@@ -310,4 +375,13 @@ tools_for_methods = {
     'sear': ['pan'],
     'scramble': ['whisk'],
     'reduce': ['sauce pot']
+}
+
+common_time = {
+    "hour" : "hour",
+    "hours" : "hours",
+    "minute" : "minute",
+    "minutes" : "minutes",
+    "second" : "second",
+    "seconds" : "seconds"
 }
