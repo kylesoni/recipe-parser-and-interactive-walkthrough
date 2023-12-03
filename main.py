@@ -34,7 +34,7 @@ for step in directions:
 #print(scraper.instructions_list())
 
 test_recipe = Recipe(ingredient_list, steps)
-test_recipe.test_ingredient_groups()
-# test_recipe.test_steps()
+# test_recipe.test_ingredient_groups()
+test_recipe.test_steps()
 # print(test_recipe.progress_step().text)
 # print(test_recipe.ingredients[-1].ingredient)

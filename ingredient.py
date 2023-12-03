@@ -11,8 +11,6 @@ class Ingredient:
         
         if not isinstance(ingredient_info, str):
             raise(Exception("Expected ingredient information to be a string."))
-
-        ingredient_words = ingredient_info.split()
         
         self.raw = ingredient_info
         self.amount = str(0)

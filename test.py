@@ -1,1 +1,1 @@
-print("4 eggs".split())
+print("4".split())

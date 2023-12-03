@@ -29,8 +29,10 @@ class Recipe:
         current_category = "generic"
         for i in range(len(scraped_steps)):
             for key in list(self.ingredient_groups.keys()):
-                if key in scraped_steps[i].lower():
-                    current_category = key
+                key_words = key.split()
+                for word in key_words:
+                    if word in scraped_steps[i].lower():
+                        current_category = key
             if current_category in self.ingredient_groups:
                 self.steps.append(Step(scraped_steps[i], self.ingredient_groups[current_category]))
 
@@ -61,4 +63,6 @@ class Recipe:
         for i in range(len(self.steps)):
             print("Step: " + self.steps[i].text)
             print("Ingredients: " + str(self.steps[i].ingredients))
+            print("Tools: " + str(self.steps[i].tools))
+            print("Methods: " + str(self.steps[i].methods))
             print("")
