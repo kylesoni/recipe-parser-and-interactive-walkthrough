@@ -46,6 +46,13 @@ class Recipe:
             return self.steps[self.current_step]
         else:
             return "You have reached the end of the recipe!"
+        
+    def regress_step(self):
+        if self.current_step - 1 >= 0:
+            self.current_step -= 1
+            return self.steps[self.current_step]
+        else:
+            return "You are on the first step of the recipe!"
 
     def test_ingredients(self):
         for i in range(len(self.ingredients)):

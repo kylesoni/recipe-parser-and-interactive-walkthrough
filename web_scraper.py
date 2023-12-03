@@ -14,9 +14,11 @@ body = soup.body.text
 
 # get ingredients
 ingredient_list = []
-ing_results = soup.find(id="mntl-lrs-ingredients_1-0")
-list_of_ing = ing_results.find_all(["p"])
-for list in list_of_ing:
+ing_results = soup.find(id="mntl-structured-ingredients_1-0")
+list_of_ing = ing_results.find_all("li")
+ing_headings = soup.find(id="mntl-lrs-ingredients_1-0")
+list_of_headings = ing_headings.find_all(["p"])
+for list in list_of_headings:
     ingredient_list.append(list.get_text().strip(' \n\r\t'))
 
 # get steps
@@ -58,20 +60,7 @@ while i:
         url = 'https://google.com/search?q=' + search
         print('Here is what I found: ' + url)
     
-    # if it's an ingredient amount question
-    ing_query_pattern = '((H|h)ow much |(H|h)ow many | do I need)'
-    query = re.match(ing_query_pattern, user_input)
-    if query:
-        query = re.split(ing_query_pattern, user_input)
-        for ing in RECIPE.ingredients:
-            if re.match(ing.ingredient, query[1]):
-                print((ing.amount) + " " + (ing.unit))
-                break
-            # elseif made it to last ingredient and still no match:
-            #     print("Ingredient not found")
-    
     # if it's a list request
-    # list_query_pattern = '((S|s)how me the |(G|g)o over the |1|2)'
     ing_list_pattern = ['ingredients list', '1']
     rec_list_pattern = ['recipe steps', '2']
 
@@ -98,20 +87,64 @@ while i:
         print(RECIPE.progress_step().text)
 
     # current step
-    curstep_query_pattern = '(repeat|step again)'
+    curstep_query_pattern = '((R|r)epeat|step again)'
     if user_input.__contains__(curstep_query_pattern):
         print('Here is the current step:')
         print(RECIPE.steps[RECIPE.current_step].text)
 
     # next step
-    nextstep_query_pattern = '(next|next step)'
+    nextstep_query_pattern = '((N|n)ext|(N|n)ext step|(C|c)ontinue)'
     query = re.match(nextstep_query_pattern, user_input)
     if query:
-        print('Here is the next step:')
-        print(RECIPE.progress_step().text)
+        response = RECIPE.progress_step()
+        if isinstance(response, str):
+            print(response)
+        else:
+            print('Here is the next step:')
+            print(response.text)
+
+    # last step
+    laststep_query_pattern = '((G|g)o back|back)'
+    query = re.match(laststep_query_pattern, user_input)
+    if query:
+        response = RECIPE.regress_step()
+        if isinstance(response, str):
+            print(response)
+        else:
+            print('Here is the previous step:')
+            print(response.text)
+    
+    # if it's an ingredient amount question
+    ing_query_pattern = '((H|h)ow much |(H|h)ow many | do I need)'
+    query = re.match(ing_query_pattern, user_input)
+    if query:
+        query = re.split(ing_query_pattern, user_input)
+        i = 0
+        j = 0
+        for ing in RECIPE.steps[RECIPE.current_step].ingredients:
+            if re.match(RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient, query[4]) != None:
+                print(RECIPE.steps[RECIPE.current_step].ingredients[i].amount + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].unit)
+                j += 10
+            i += 1
+            j += 1
+            if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)-1):
+                print("Ingredient not found")
+
+    # if it's a tools question
+    tools_query_pattern = 'tools'
+    if user_input.__contains__(tools_query_pattern):
+        print('Here are the tools needed in this step:')
+        print('These are the prep tools: ' + str(RECIPE.steps[RECIPE.current_step].tools["prep"]).strip("['']"))
+        print('These are the cooking tools: ' + str(RECIPE.steps[RECIPE.current_step].tools["step"]).strip("['']"))
+
+    # if it's a prep question
+    prep_query_pattern = '(prep|prepare|preparation)'
+    if user_input.__contains__(prep_query_pattern):
+        print('Here is what you need to prepare the ingredients for this step:')
+
 
     # if user wants to quit
-    quit_pattern = '(quit|stop)'
+    quit_pattern = '((Q|q)uit|(S|s)top)'
     query = re.match(quit_pattern, user_input)
     if query:
         print("Thanks for walking through the recipe with me. Goodbye!")
