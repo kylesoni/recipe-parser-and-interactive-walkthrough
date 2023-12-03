@@ -57,6 +57,7 @@ class Recipe:
     def test_ingredients(self):
         for i in range(len(self.ingredients)):
             print("Amount: " + self.ingredients[i].amount)
+            print("Amount Clarification: " + self.ingredients[i].amount_clar)
             print("Unit: " + self.ingredients[i].unit)
             print("Ing: " + self.ingredients[i].ingredient)
             print("Prep: " + self.ingredients[i].prep)

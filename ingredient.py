@@ -14,6 +14,7 @@ class Ingredient:
         
         self.raw = ingredient_info
         self.amount = str(0)
+        self.amount_clar = ""
         self.get_amount(ingredient_info)
         self.unit = ""
         self.get_unit(ingredient_info)
@@ -27,12 +28,14 @@ class Ingredient:
     def get_amount(self, ingredient_info):
         ingredient_words = ingredient_info.split()
         amount_candidate = [ingredient_words[0], ingredient_words[1]]
-        if not re.search('^[a-zA-Z,.?]+$', amount_candidate[0]):
+        if not re.search('^[a-zA-Z,.?]+$', amount_candidate[0]) and "(" not in amount_candidate[0] and ")" not in amount_candidate[0]:
             self.amount = amount_candidate[0]
-            if not re.search('^[a-zA-Z,.?]+$', amount_candidate[1]):
+            if not re.search('^[a-zA-Z,.?]+$', amount_candidate[1]) and "(" not in amount_candidate[1] and ")" not in amount_candidate[1]:
                 self.amount += amount_candidate[1]
-        elif not re.search('^[a-zA-Z,.?]+$', amount_candidate[1]):
+        elif not re.search('^[a-zA-Z,.?]+$', amount_candidate[1]) and "(" not in amount_candidate[1] and ")" not in amount_candidate[1]:
             self.amount = amount_candidate[1]
+        if re.search("\(([^)]+)\)", ingredient_info):
+            self.amount_clar = re.search("\(([^)]+)\)", ingredient_info).group(0)
 
     def get_unit(self, ingredient_info):
         ingredient_words = ingredient_info.split()
@@ -47,7 +50,7 @@ class Ingredient:
             self.unit = ""
     
     def get_ingredient(self, ingredient_info):
-        ingredient_words = ingredient_info.split()
+        ingredient_words = re.sub("\(([^)]+)\)", "", ingredient_info).split()
         first = True
         for word in ingredient_words:
             if word not in self.amount and word not in common_units:
@@ -145,6 +148,7 @@ common_units = {
     'package': 'package',
     'clove': 'clove',
     'cloves': 'cloves',
+    'bottle': 'bottle'
     }
 
 common_prep = {
@@ -156,14 +160,17 @@ common_prep = {
     'chopped': 'chopped',
     'cut' : 'cut',
     'sliced' : 'sliced',
-    'minced' : 'minced'
+    'minced' : 'minced',
+    'grated' : 'grated'
 }
 
 common_descriptor = {
     'packed': 'packed',
     'all-purpose': 'all-purpose',
     'extra-virgin': 'extra-virgin',
-    'large': 'large'
+    'large': 'large',
+    'boneless' : 'boneless',
+    'skinless' : 'skinless'
 }
 
 prep_tools = {
@@ -174,23 +181,6 @@ prep_tools = {
     'chopped': 'knife',
     'cut' : 'knife',
     'sliced' : 'knife',
-    'minced' : 'knife'
+    'minced' : 'knife',
+    'grated' : 'cheese grater'
 }
-
-
-test_ingredient = Ingredient("4 cups peeled, cubed sweet potatoes")
-
-# print(test_ingredient.ingredient)
-# print(test_ingredient.amount)
-# print(test_ingredient.unit)
-# print(test_ingredient.prep)
-# print(test_ingredient.desc)
-
-# doc = spacy_model("4 cups peeled, cubed sweet potatoes")
-
-# for token in doc:
-#     # print(token.text, token.dep_, token.head.text, token.head.pos_,
-#     #         [child for child in token.children])
-#     # if token.text == "squares":
-#     #     print(token.dep_)
-#     print(token.text)
