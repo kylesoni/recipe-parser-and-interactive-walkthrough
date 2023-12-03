@@ -21,6 +21,7 @@ class Ingredient:
         self.get_ingredient(ingredient_info)
         self.prep = ""
         self.desc = ""
+        self.tools = []
         self.get_prep_and_descriptor()
 
     def get_amount(self, ingredient_info):
@@ -98,6 +99,8 @@ class Ingredient:
                     prep_words += " " + raw_word
                 if word in actual_ingredient_words:
                     actual_ingredient_words.remove(word)
+                if word in prep_tools:
+                    self.tools.append(prep_tools[word])
         self.prep = prep_words
 
         if len(desc_words) > 0:
@@ -161,6 +164,17 @@ common_descriptor = {
     'all-purpose': 'all-purpose',
     'extra-virgin': 'extra-virgin',
     'large': 'large'
+}
+
+prep_tools = {
+    'diced': 'knife',
+    'cubed': 'knife',
+    'beaten': 'fork or whisk',
+    'peeled': 'peeler',
+    'chopped': 'knife',
+    'cut' : 'knife',
+    'sliced' : 'knife',
+    'minced' : 'knife'
 }
 
 

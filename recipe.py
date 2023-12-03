@@ -54,6 +54,7 @@ class Recipe:
             print("Ing: " + self.ingredients[i].ingredient)
             print("Prep: " + self.ingredients[i].prep)
             print("Description: " + self.ingredients[i].desc)
+            print("Tools: " + str(self.ingredients[i].tools))
             print("")
 
     def test_ingredient_groups(self):
@@ -65,10 +66,13 @@ class Recipe:
 
     def test_steps(self):
         for i in range(len(self.steps)):
+            act_ing = []
+            for j in range(len(self.steps[i].ingredients)):
+                act_ing.append(self.steps[i].ingredients[j].ingredient)
             print("Step: " + self.steps[i].text)
-            print("Ingredients: " + str(self.steps[i].ingredients))
+            print("Ingredients: " + str(act_ing))
             print("Tools: " + str(self.steps[i].tools))
             print("Methods: " + str(self.steps[i].methods))
-            print("Time: " + self.steps[i].time["Hard"] + " or " + self.steps[i].time["Soft"])
-            print("Settings: " + self.steps[i].settings["Stove"] + " or " + self.steps[i].settings["Oven"])
+            print("Time: " + str(self.steps[i].time))
+            print("Settings: " + str(self.steps[i].settings))
             print("")

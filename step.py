@@ -10,7 +10,7 @@ class Step:
         
         self.text = step_info
         self.ingredients = []
-        self.tools = {"step" : [], "preparation" : []}
+        self.tools = {"step" : [], "prep" : []}
         self.methods = []
         self.time = {"Hard" : "", "Soft" : ""}
         self.settings = {"Stove" : "", "Oven" : ""}
@@ -33,8 +33,8 @@ class Step:
                 for w in check:
                     if w not in raw:
                         flag = False
-                if flag and ing.ingredient not in self.ingredients:
-                        self.ingredients.append(ing.ingredient)
+                if flag and ing not in self.ingredients:
+                        self.ingredients.append(ing)
     
     def get_tools(self):
         raw = self.text.lower()
@@ -67,8 +67,8 @@ class Step:
         for word in tools_for_methods:
             if word in raw:
                 for tool in tools_for_methods[word]:
-                    if tool not in self.tools:
-                        self.tools.append(tool)
+                    if tool not in self.tools["prep"]:
+                        self.tools["prep"].append(tool)
     
     def get_time(self):
         time_candidates = []
