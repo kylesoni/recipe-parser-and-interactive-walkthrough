@@ -34,7 +34,11 @@ class Step:
                     if w not in raw:
                         flag = False
                 if flag and ing not in self.ingredients:
-                        self.ingredients.append(ing)
+                    self.ingredients.append(ing)
+                    if len(ing.tools) > 0:
+                        for tool in ing.tools:
+                            if tool not in self.tools["prep"]:
+                                self.tools["prep"].append(tool)
     
     def get_tools(self):
         raw = self.text.lower()
@@ -67,8 +71,8 @@ class Step:
         for word in tools_for_methods:
             if word in raw:
                 for tool in tools_for_methods[word]:
-                    if tool not in self.tools["prep"]:
-                        self.tools["prep"].append(tool)
+                    if tool not in self.tools["step"]:
+                        self.tools["step"].append(tool)
     
     def get_time(self):
         time_candidates = []
