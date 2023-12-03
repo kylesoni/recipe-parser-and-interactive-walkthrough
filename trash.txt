@@ -1,1 +1,9 @@
-Prepare sweet potatoes: Put sweet potatoes in a medium saucepan and cover with water. Cook over medium-high heat until tender, 10 to 15 minutes. Drain and transfer to a large bowl.
+"braised" : "braised",
+"brewed" : "brewed",
+"boiled" : "boiled",
+"broiled" : "broiled",
+"browned" : "browned",
+"caramelized" : "caramelized",
+"chopped" : "chopped",
+"pulverized" : "pulverized",
+"whipped" : "whipped"

@@ -7,7 +7,7 @@ import spacy
 # Get syntactic parser
 spacy_model = spacy.load("en_core_web_sm")
 
-url = "https://www.allrecipes.com/crockpot-italian-chicken-recipe-7501402"
+url = "https://www.allrecipes.com/mexican-polenta-pizza-recipe-7508449"
 page = requests.get(url)
 soup = BeautifulSoup(page.content, 'html.parser')
 title = soup.title.text
@@ -35,7 +35,7 @@ for step in directions:
 
 test_recipe = Recipe(ingredient_list, steps)
 # test_recipe.test_ingredient_groups()
-test_recipe.test_ingredients()
+#test_recipe.test_ingredients()
 test_recipe.test_steps()
 # print(test_recipe.progress_step().text)
 # print(test_recipe.ingredients[-1].ingredient)
