@@ -10,7 +10,8 @@ class Recipe:
         self.steps = []
         self.tools = []
         self.methods = []
-        self.ingredient_groups = {}
+        self.ingredient_groups = {"generic" : []}
+        self.current_temp = ""
 
         self.current_step = -1
 
@@ -34,7 +35,10 @@ class Recipe:
                     if word in scraped_steps[i].lower():
                         current_category = key
             if current_category in self.ingredient_groups:
-                self.steps.append(Step(scraped_steps[i], self.ingredient_groups[current_category]))
+                new_step = Step(scraped_steps[i], self.ingredient_groups[current_category])
+                self.steps.append(new_step)
+                if new_step.settings["Oven"] != "":
+                    self.current_temp = self.steps[i].settings["Oven"]
 
     def progress_step(self):
         if self.current_step + 1 < len(self.steps):
@@ -66,4 +70,5 @@ class Recipe:
             print("Tools: " + str(self.steps[i].tools))
             print("Methods: " + str(self.steps[i].methods))
             print("Time: " + self.steps[i].time["Hard"] + " or " + self.steps[i].time["Soft"])
+            print("Settings: " + self.steps[i].settings["Stove"] + " or " + self.steps[i].settings["Oven"])
             print("")

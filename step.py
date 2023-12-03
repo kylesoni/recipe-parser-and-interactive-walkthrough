@@ -13,11 +13,13 @@ class Step:
         self.tools = []
         self.methods = []
         self.time = {"Hard" : "", "Soft" : ""}
+        self.settings = {"Stove" : "", "Oven" : ""}
 
         self.get_ingredients(r_ingredients)
         self.get_tools()
         self.get_methods()
         self.get_time()
+        self.get_settings()
 
     def get_ingredients(self, ing_list):
         raw = self.text.lower()
@@ -127,6 +129,70 @@ class Step:
                         self.time["Soft"] = word
                     else:
                         self.time["Soft"] += " " + word
+    
+    def get_settings(self):
+        settings_candidates = []
+        doc = spacy_model(self.text)
+        word_list = self.text.split()
+        for i, word in enumerate(word_list):
+            word = re.sub(r'[^\w\s]', '', word)
+            if word == "heat":
+                for token in doc:
+                    if token.text == word:
+                        tracker = [token]
+                        while len(tracker) > 0:
+                            t = tracker.pop()
+                            for child in t.children:
+                                tracker.append(child)
+                                if child.pos_ != "VERB":
+                                    if child.text not in settings_candidates:
+                                        settings_candidates.append(child.text)
+                            if t.text not in settings_candidates:
+                                settings_candidates.append(token.text)
+
+        text_words = re.sub(r'[^\w\s]', '', self.text).split()
+        for i, word in enumerate(text_words):
+            if word in settings_candidates:
+                if self.settings["Stove"] == "":
+                    self.settings["Stove"] = word
+                else:
+                    self.settings["Stove"] += " " + word
+
+        settings_candidates = []
+        doc = spacy_model(self.text)
+        word_list = self.text.split()
+        for i, word in enumerate(word_list):
+            word = re.sub(r'[^\w\s]', '', word)
+            if word == "degrees":
+                for token in doc:
+                    if token.text == word:
+                        tracker = [token]
+                        while len(tracker) > 0:
+                            t = tracker.pop()
+                            for child in t.children:
+                                tracker.append(child)
+                                if child.pos_ != "VERB":
+                                    if child.text not in settings_candidates:
+                                        settings_candidates.append(child.text)
+                            if t.text not in settings_candidates:
+                                settings_candidates.append(token.text)
+                if i + 1 < len(word_list) and (word_list[i + 1] == "F" or word_list[i + 1] == "C"):
+                    if word_list[i + 1] not in settings_candidates:
+                        settings_candidates.append(word_list[i + 1])
+
+        text_words = re.sub(r'[^\w\s]', '', self.text).split()
+        for i, word in enumerate(text_words):
+            if word in settings_candidates:
+                if "F" in self.settings["Oven"] and re.search("[0-9]+", word):
+                    word = "(" + word
+                if "F" in self.settings["Oven"] and word == "C":
+                    word = word + ")"
+                if self.settings["Oven"] == "":
+                    self.settings["Oven"] = word
+                else:
+                    self.settings["Oven"] += " " + word
+
+                
                 
 # partly from Wikipedia:  
 common_tools = {
