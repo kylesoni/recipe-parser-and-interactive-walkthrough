@@ -1,5 +1,12 @@
 # cs337-project2
 
+Group composed of Kyle Soni and Anges Vu
+https://github.com/kylesoni/cs337-project2
+
+## Requirements:
+- Python version: 3.11.5
+- pip requirements: bs4, requests, re, and spacy
+
 ## Supported Questions
 - What is x?
 - How do I x?
