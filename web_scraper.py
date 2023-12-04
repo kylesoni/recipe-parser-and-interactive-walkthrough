@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from recipe import Recipe
+import transformations
 
 # receive URL input from user
 url = input("Hello! I can help walk you through a recipe from AllRecipes.com. Please enter a URL:")
@@ -159,11 +160,25 @@ while i:
             if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)):
                 print("Ingredient not found")
 
+    # transformation to vegan/vegetarian
+    veg_transform_pattern = '(vegetarian|vegan)'
+    query = re.match(veg_transform_pattern, user_input)
+    if query:
+        veg_recipe = transformations.meat_to_vegan(RECIPE)
+        print('Here\'s a vegan/vegetarian option for you:')
+        print("Here is the new ingredient list:\n")
+        for key in veg_recipe.ingredient_groups:
+            print(key + ": ")
+            for ing in veg_recipe.ingredient_groups[key]:
+                print(ing.raw)
+            print("")
+    
     # if it's a Google question
     google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
+    other_queries = '(prep|vegetarian|vegan)'
     query = re.match(google_query_pattern, user_input)
     if query:
-        if re.search('prep', user_input):
+        if re.search(other_queries, user_input):
             continue
         search = user_input.strip().replace(' ','+')
         url = 'https://google.com/search?q=' + search

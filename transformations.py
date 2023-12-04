@@ -200,6 +200,7 @@ meat_to_vegan_words = {
     "milk" : "almond milk",
     "butter" : "margarine",
     "egg" : "vegan egg",
+    "eggs" : "vegan eggs"
     
     "cream" : "vegan cream",
     "yogurt" : "vegan yogurt",
