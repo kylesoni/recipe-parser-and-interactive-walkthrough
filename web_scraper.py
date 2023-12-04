@@ -313,30 +313,6 @@ while flag:
         else:
             print("Okay, let\'s keep the original recipe.")
             continue
-
-    # transformation to vegan/vegetarian
-    veg_transform_pattern = '(vegetarian|vegan)'
-    query = re.match(veg_transform_pattern, user_input)
-    if query:
-        print('Here\'s a healthier option for you:')
-        new_recipe = transformations.make_healthy(RECIPE)
-        print("Here is the new ingredient list:\n")
-        for key in new_recipe.ingredient_groups:
-            print(key + ": ")
-            for ing in new_recipe.ingredient_groups[key]:
-                print(ing.raw)
-            print("")
-        print("Here are the new recipe steps:\n")
-        for step in new_recipe.steps:
-            print(step.text)
-        print("Would you like to use this new recipe?")
-        if re.match('(Y|y|(Y|y)es)', input()):
-            RECIPE = new_recipe
-            print("Okay, the recipe has been updated!")
-            continue
-        else:
-            print("Okay, let\'s keep the original recipe.")
-            continue
     
     # if it's a vague How to
     vague_pattern = '(H|h)ow do I do that'
