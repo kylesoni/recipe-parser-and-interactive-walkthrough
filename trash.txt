@@ -1,9 +1,0 @@
-"braised" : "braised",
-"brewed" : "brewed",
-"boiled" : "boiled",
-"broiled" : "broiled",
-"browned" : "browned",
-"caramelized" : "caramelized",
-"chopped" : "chopped",
-"pulverized" : "pulverized",
-"whipped" : "whipped"
