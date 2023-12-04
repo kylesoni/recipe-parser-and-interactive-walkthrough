@@ -160,6 +160,75 @@ while flag:
             if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)):
                 print("Ingredient not found")
 
+    # transformation to vegan
+    vegan_transform_pattern = '(vegan)'
+    query = re.search(vegan_transform_pattern, user_input)
+    if query:
+        print('Here\'s a vegan option for you:')
+        new_recipe = transformations.meat_to_vegan(RECIPE)
+        print("Here is the new ingredient list:\n")
+        for key in new_recipe.ingredient_groups:
+            print(key + ": ")
+            for ing in new_recipe.ingredient_groups[key]:
+                print(ing.raw)
+            print("")
+        print("Here are the new recipe steps:\n")
+        for step in new_recipe.steps:
+            print(step.text)
+        print("Would you like to use this new recipe?")
+        if re.match('(Y|y|(Y|y)es)', input()):
+            RECIPE = new_recipe
+            print("Okay, the recipe has been updated!")
+        else:
+            print("Okay, let\'s keep the original recipe.")
+
+    # transformation to vegetarian
+    vegetarian_transform_pattern = '(vegetarian)'
+    query = re.search(vegetarian_transform_pattern, user_input)
+    if query:
+        print('Here\'s a vegetarian option for you:')
+        new_recipe = transformations.meat_to_vegetarian(RECIPE)
+        print("Here is the new ingredient list:\n")
+        for key in new_recipe.ingredient_groups:
+            print(key + ": ")
+            for ing in new_recipe.ingredient_groups[key]:
+                print(ing.raw)
+            print("")
+        print("Here are the new recipe steps:\n")
+        for step in new_recipe.steps:
+            print(step.text)
+        print("Would you like to use this new recipe?")
+        if re.match('(Y|y|(Y|y)es)', input()):
+            RECIPE = new_recipe
+            print("Okay, the recipe has been updated!")
+        else:
+            print("Okay, let\'s keep the original recipe.")
+
+    # transformation to kosher
+    kosher_transform_pattern = '(kosher)'
+    query = re.search(kosher_transform_pattern, user_input)
+    if query:
+        print('Here\'s a kosher option for you:')
+        new_recipe = transformations.make_kosher(RECIPE)
+        print("Here is the new ingredient list:\n")
+        for key in new_recipe.ingredient_groups:
+            print(key + ": ")
+            for ing in new_recipe.ingredient_groups[key]:
+                print(ing.raw)
+            print("")
+        print("Here are the new recipe steps:\n")
+        for step in new_recipe.steps:
+            print(step.text)
+        print("Would you like to use this new recipe?")
+        if re.match('(Y|y|(Y|y)es)', input()):
+            RECIPE = new_recipe
+            print("Okay, the recipe has been updated!")
+        else:
+            print("Okay, let\'s keep the original recipe.")
+
+    # transformation to healthy
+    healthy_transform_pattern = '(healthy|healthier)'
+    query = re.search(healthy_transform_pattern, user_input)
     # if it's a time question
     time_query_pattern = "((H|h)ow long|(W|w)hat is the time needed for)"
     query = re.search(time_query_pattern, user_input)
@@ -177,18 +246,27 @@ while flag:
     veg_transform_pattern = '(vegetarian|vegan)'
     query = re.match(veg_transform_pattern, user_input)
     if query:
-        veg_recipe = transformations.meat_to_vegan(RECIPE)
-        print('Here\'s a vegan/vegetarian option for you:')
+        print('Here\'s a healthier option for you:')
+        new_recipe = transformations.make_healthy(RECIPE)
         print("Here is the new ingredient list:\n")
-        for key in veg_recipe.ingredient_groups:
+        for key in new_recipe.ingredient_groups:
             print(key + ": ")
-            for ing in veg_recipe.ingredient_groups[key]:
+            for ing in new_recipe.ingredient_groups[key]:
                 print(ing.raw)
             print("")
+        print("Here are the new recipe steps:\n")
+        for step in new_recipe.steps:
+            print(step.text)
+        print("Would you like to use this new recipe?")
+        if re.match('(Y|y|(Y|y)es)', input()):
+            RECIPE = new_recipe
+            print("Okay, the recipe has been updated!")
+        else:
+            print("Okay, let\'s keep the original recipe.")
     
     # if it's a Google question
     google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
-    other_queries = '(prep|vegetarian|vegan|tools)'
+    other_queries = '(prep|tool|vegetarian|vegan|kosher|health)'
     query = re.match(google_query_pattern, user_input)
     if query:
         if re.search(other_queries, user_input):
