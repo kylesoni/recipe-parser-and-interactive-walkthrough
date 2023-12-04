@@ -302,9 +302,20 @@ while flag:
         else:
             print("Okay, let\'s keep the original recipe.")
     
+    # if it's a vague How to
+    vague_pattern = '(H|h)ow do I do that'
+    query = re.match(vague_pattern, user_input)
+    if query:
+        methods = RECIPE.steps[RECIPE.current_step].methods
+        if len(methods) < 1:
+            print("No method found, sorry! If you add more detail I may be able to help.")
+        else:
+            for method in methods:
+                print("Here is how to do " + method + ": " + "https://google.com/search?q=how+do+I+" + method)
+
     # if it's a Google question
     google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
-    other_queries = '(prep|tool|vegetarian|vegan|kosher|health|time|temperature|setting|heat)'
+    other_queries = '(prep|tool|vegetarian|vegan|kosher|health|time|temperature|setting|heat|that)'
     query = re.match(google_query_pattern, user_input)
     if query:
         if re.search(other_queries, user_input):
