@@ -134,15 +134,20 @@ while flag:
     if query:
         query = re.split(ing_query_pattern, user_input)
         i = 0
-        j = 0
+        found = False
         for ing in RECIPE.steps[RECIPE.current_step].ingredients:
-            if re.match(RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient, query[4]) != None:
-                print(RECIPE.steps[RECIPE.current_step].ingredients[i].amount + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].unit)
-                j += 10
+            if query[4] in RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient:
+                if (RECIPE.steps[RECIPE.current_step].ingredients[i].amount_clar != "") and not found:
+                    if "to taste" in RECIPE.steps[RECIPE.current_step].ingredients[i].amount_clar:
+                        print(RECIPE.steps[RECIPE.current_step].ingredients[i].amount + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].unit + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient + ", or to taste")
+                    else:
+                        print(RECIPE.steps[RECIPE.current_step].ingredients[i].amount + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].amount_clar + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].unit + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient)
+                else:
+                    print(RECIPE.steps[RECIPE.current_step].ingredients[i].amount + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].unit)
+                found = True
             i += 1
-            j += 1
-            if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)):
-                print("Ingredient not found.")
+        if not found:
+            print("Ingredient not found.")
 
     # if it's a tools question
     tools_query_pattern = 'tools'
@@ -180,6 +185,25 @@ while flag:
             j += 1
             if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)):
                 print("Ingredient not found")
+
+    # if it's a settings question
+    temp_query_pattern = "((W|w)hat is the temperature|(W|w)hat is temperature|(W|w)hat is the temp|(W|w)hat is temp)"
+    query = re.match(temp_query_pattern, user_input)
+    if query:
+        if RECIPE.steps[RECIPE.current_step].settings["Oven"] != "":
+            print("The temperature should be: " + RECIPE.steps[RECIPE.current_step].settings["Oven"])
+        elif RECIPE.steps[RECIPE.current_step].current_temp != "":
+            print("The temperature should be: " + RECIPE.steps[RECIPE.current_step].current_temp)
+        else:
+            print("Temperature not found")
+
+    heat_query_pattern = "((W|w)hat is the heat setting|(W|w)hat is heat)"
+    query = re.match(heat_query_pattern, user_input)
+    if query:
+        if RECIPE.steps[RECIPE.current_step].settings["Stove"] != "":
+            print("The stove settings should be: " + RECIPE.steps[RECIPE.current_step].settings["Stove"])
+        else:
+            print("Heat setting not found")
 
     # if it's a time question
     time_query_pattern = "((H|h)ow long|(W|w)hat is the time needed for)"
@@ -304,9 +328,20 @@ while flag:
         else:
             print("Okay, let\'s keep the original recipe.")
     
+    # if it's a vague How to
+    vague_pattern = '(H|h)ow do I do that'
+    query = re.match(vague_pattern, user_input)
+    if query:
+        methods = RECIPE.steps[RECIPE.current_step].methods
+        if len(methods) < 1:
+            print("No method found, sorry! If you add more detail I may be able to help.")
+        else:
+            for method in methods:
+                print("Here is how to " + method + ": " + "https://google.com/search?q=how+do+I+" + method)
+
     # if it's a Google question
     google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
-    other_queries = '(prep|tool|vegetarian|vegan|kosher|health|time)'
+    other_queries = '(prep|tool|vegetarian|vegan|kosher|health|time|temperature|setting|heat|that)'
     query = re.match(google_query_pattern, user_input)
     if query:
         if re.search(other_queries, user_input):

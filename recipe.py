@@ -37,8 +37,11 @@ class Recipe:
             if current_category in self.ingredient_groups:
                 new_step = Step(scraped_steps[i], self.ingredient_groups[current_category])
                 self.steps.append(new_step)
-                if new_step.settings["Oven"] != "":
+                if new_step.settings["Oven"].replace(" ", "") != "":
                     self.current_temp = self.steps[i].settings["Oven"]
+                    new_step.current_temp = self.steps[i].settings["Oven"]
+                else:
+                    new_step.current_temp = self.current_temp
 
     def progress_step(self):
         if self.current_step + 1 < len(self.steps):

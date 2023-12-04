@@ -14,6 +14,7 @@ class Step:
         self.methods = []
         self.time = {"Hard" : "", "Soft" : ""}
         self.settings = {"Stove" : "", "Oven" : ""}
+        self.current_temp = ""
 
         self.get_ingredients(r_ingredients)
         self.get_tools()
@@ -422,7 +423,8 @@ common_methods = {
     "shuck" : "shuck",
     "smoke" : "smoke",
     "steam" : "steam",
-    "stir fry " : " stir fry"
+    "stir fry " : " stir fry",
+    "preheat" : "preheat"
 }
 
 tools_for_methods = {
