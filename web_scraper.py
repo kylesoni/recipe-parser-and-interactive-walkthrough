@@ -115,7 +115,7 @@ while flag:
     if re.match(nthstep_query_pattern, user_input):
         step = int(re.findall(r'\d+', user_input)[0])
         new_current_step = step - 1
-        if new_current_step >= (len(RECIPE.steps)-1):
+        if new_current_step > (len(RECIPE.steps)-1):
             print('There is no step #' + str(step) + '.')
         else:
             print('Here is step #' + str(step) + ':')
@@ -157,9 +157,9 @@ while flag:
         print('These are the cooking tools: ' + str(RECIPE.steps[RECIPE.current_step].tools["step"]).strip("['']").replace("'",""))
 
     # if it's a methods question
-    cook_query_pattern = '(cook|cooking|cooking method|method)'
+    cook_query_pattern = 'methods'
     query = re.match(cook_query_pattern, user_input)
-    if query:
+    if user_input.__contains__(cook_query_pattern):
         if len(RECIPE.steps[RECIPE.current_step].methods) == 0:
             print("There are no cooking methods involved in this step.")
         else:
@@ -172,19 +172,18 @@ while flag:
     if query:
         query = re.split(prep_query_pattern, user_input)
         i = 0
-        j = 0
+        found = False
         for ing in RECIPE.steps[RECIPE.current_step].ingredients:
-            if re.match(RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient, query[len(query)-1]) != None:
+            if query[len(query)-1] in RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient and not found:
                 if len(RECIPE.steps[RECIPE.current_step].ingredients[i].prep) == 0:
                     print('There is no preparation needed for ' + query[len(query)-1] + '.')
                 else:
                     print('Here\'s how ' + query[len(query)-1] + ' need(s) to be prepped:')
                     print(RECIPE.steps[RECIPE.current_step].ingredients[i].prep)
-                j += 10
+                found = True
             i += 1
-            j += 1
-            if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)):
-                print("Ingredient not found")
+        if not found:
+            print("Ingredient not found")
 
     # if it's a settings question
     temp_query_pattern = "((W|w)hat is the temperature|(W|w)hat is temperature|(W|w)hat is the temp|(W|w)hat is temp)"
@@ -327,7 +326,7 @@ while flag:
 
     # if it's a Google question
     google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
-    other_queries = '(prep|tool|vegetarian|vegan|kosher|health|time|temperature|setting|heat|that)'
+    other_queries = '(prep|tool|vegetarian|vegan|kosher|health|time|temperature|setting|heat|that|method|cook)'
     query = re.match(google_query_pattern, user_input)
     if query:
         if re.search(other_queries, user_input):
