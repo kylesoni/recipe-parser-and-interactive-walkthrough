@@ -3,6 +3,10 @@
 Group composed of Kyle Soni and Anges Vu
 https://github.com/kylesoni/cs337-project2
 
+## To run:
+- Run web_scraper.py for interface and do similar things to video
+- Run main.py after changing url to get direct output from parsing
+
 ## Requirements:
 - Python version: 3.11.5
 - pip requirements: bs4, requests, re, and spacy
