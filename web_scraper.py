@@ -172,6 +172,15 @@ while i:
             for ing in veg_recipe.ingredient_groups[key]:
                 print(ing.raw)
             print("")
+        print("Here are the new recipe steps:\n")
+        for step in veg_recipe.steps:
+            print(step.text)
+        print("Would you like to use this new recipe?")
+        if re.match('(Y|y|(Y|y)es)', input()):
+            RECIPE = veg_recipe
+            print("Okay, the recipe has been updated!")
+        else:
+            print("Okay, let\'s keep the original recipe.")
     
     # if it's a Google question
     google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
