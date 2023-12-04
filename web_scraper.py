@@ -113,15 +113,20 @@ while flag:
     if query:
         query = re.split(ing_query_pattern, user_input)
         i = 0
-        j = 0
+        found = False
         for ing in RECIPE.steps[RECIPE.current_step].ingredients:
-            if re.match(RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient, query[4]) != None:
-                print(RECIPE.steps[RECIPE.current_step].ingredients[i].amount + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].unit)
-                j += 10
+            if query[4] in RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient:
+                if (RECIPE.steps[RECIPE.current_step].ingredients[i].amount_clar != "") and not found:
+                    if "to taste" in RECIPE.steps[RECIPE.current_step].ingredients[i].amount_clar:
+                        print(RECIPE.steps[RECIPE.current_step].ingredients[i].amount + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].unit + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient + ", or to taste")
+                    else:
+                        print(RECIPE.steps[RECIPE.current_step].ingredients[i].amount + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].amount_clar + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].unit + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].ingredient)
+                else:
+                    print(RECIPE.steps[RECIPE.current_step].ingredients[i].amount + " " + RECIPE.steps[RECIPE.current_step].ingredients[i].unit)
+                found = True
             i += 1
-            j += 1
-            if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)):
-                print("Ingredient not found.")
+        if not found:
+            print("Ingredient not found.")
 
     # if it's a tools question
     tools_query_pattern = 'tools'
