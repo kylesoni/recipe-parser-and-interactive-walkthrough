@@ -54,10 +54,12 @@ while flag:
     user_input = re.sub(r'[,.!?@#$%^&*_~]', '', user_input)
     
     # if it's a list request
+    ing_list_regex = '(ingredients list|^1$)'
+    rec_list_regex = '(recipe steps|^2$)'
     ing_list_pattern = ['ingredients list', '1']
     rec_list_pattern = ['recipe steps', '2']
 
-    if user_input.__contains__(ing_list_pattern[0])|user_input.__contains__(ing_list_pattern[1]):
+    if re.match(ing_list_regex, user_input):
         for pattern in ing_list_pattern:
             if re.search(pattern, user_input):
                 print("Here is the ingredient list:\n")
@@ -66,7 +68,7 @@ while flag:
                     for ing in RECIPE.ingredient_groups[key]:
                         print(ing.raw)
                     print("")
-    if user_input.__contains__(rec_list_pattern[0])|user_input.__contains__(rec_list_pattern[1]):
+    if re.match(rec_list_regex, user_input):
         for pattern in rec_list_pattern:
             if re.search(pattern, user_input):
                 print("Here are the recipe steps:\n")
@@ -77,11 +79,12 @@ while flag:
     start_query_pattern = 'start'
     if user_input.__contains__(start_query_pattern):
         print('Alright, let\'s start! Here is the first step:')
-        print(RECIPE.progress_step().text)
+        print(RECIPE.steps[0].text)
+        RECIPE.current_step = RECIPE.current_step + 1
 
     # current step
-    curstep_query_pattern = '((R|r)epeat|step again)'
-    if user_input.__contains__(curstep_query_pattern):
+    curstep_query_pattern = '((R|r)epeat|current step)'
+    if re.match(curstep_query_pattern, user_input):
         print('Here is the current step:')
         print(RECIPE.steps[RECIPE.current_step].text)
 
@@ -106,6 +109,24 @@ while flag:
         else:
             print('Here is the previous step:')
             print(response.text)
+
+    # nth step
+    nthstep_query_pattern = '(((\d+)st step)|((\d+)nd step)|((\d+)rd step)|((\d+)th step))'
+    if re.match(nthstep_query_pattern, user_input):
+        step = int(re.findall(r'\d+', user_input)[0])
+        new_current_step = step - 1
+        if new_current_step >= (len(RECIPE.steps)-1):
+            print('There is no step #' + str(step) + '.')
+        else:
+            print('Here is step #' + str(step) + ':')
+            print(RECIPE.steps[new_current_step].text)
+            print('Do you want to go from here or return to where you were before?')
+            next_input = input()
+            if re.search('((G|g)o from here)', next_input):
+                RECIPE.current_step = new_current_step
+                print("Okay, let's continue from here!")
+            elif re.search('((R|r)eturn|(G|g)o back)', next_input):
+                print("Okay, let\'s return to where you were before.")
     
     # if it's an ingredient amount question
     ing_query_pattern = '((H|h)ow much |(H|h)ow many | do I need)'
