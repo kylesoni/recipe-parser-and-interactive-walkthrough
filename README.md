@@ -39,3 +39,7 @@ https://github.com/kylesoni/cs337-project2
     - go from here
     - return/go back
 - y/yes/n/no
+
+## Recipes from Videos
+- [https://www.allrecipes.com/recipe/21261/yummy-sweet-potato-casserole/]
+- [https://www.allrecipes.com/mexican-polenta-pizza-recipe-7508449]
