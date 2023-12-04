@@ -8,16 +8,16 @@ https://github.com/kylesoni/cs337-project2
 - pip requirements: bs4, requests, re, and spacy
 
 ## Supported Questions
-- What is x?
+- What is/are x?
 - How do I x?
 - How do I do that? (conditional on complicated method present in step)
-- How much of -ingredient-? (ingredient must be in step)
-- What are the tools in this step?
+- How much/many -ingredient(s)- do I need? (step must contain the inquired ingredient)
+- What are the tools in this step?/What tools do I need?
 - What are the cooking methods of this step?
-- How do I prepare -ingredient-?
+- How do I prepare -ingredient-?/What is the needed preparation for -ingredient-?
 - What is the temperature?
 - What is the heat setting?
-- How long is this step?
+- How long is this step?/What is the time needed for this step?
 
 ## Supported Transformations
 - Vegan
@@ -27,8 +27,11 @@ https://github.com/kylesoni/cs337-project2
 
 ## Supported Operations
 - start
-- next
-- repeat
+- next/continue
+- repeat/current step
 - quit
 - go back
 - go to nth step
+    - go from here
+    - return/go back
+- y/yes/n/no
