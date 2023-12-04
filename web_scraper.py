@@ -237,8 +237,10 @@ while flag:
         if re.match('(Y|y|(Y|y)es)', input()):
             RECIPE = new_recipe
             print("Okay, the recipe has been updated!")
+            continue
         else:
             print("Okay, let\'s keep the original recipe.")
+            continue
 
     # transformation to vegetarian
     vegetarian_transform_pattern = '(vegetarian)'
@@ -259,8 +261,10 @@ while flag:
         if re.match('(Y|y|(Y|y)es)', input()):
             RECIPE = new_recipe
             print("Okay, the recipe has been updated!")
+            continue
         else:
             print("Okay, let\'s keep the original recipe.")
+            continue
 
     # transformation to kosher
     kosher_transform_pattern = '(kosher)'
@@ -281,8 +285,10 @@ while flag:
         if re.match('(Y|y|(Y|y)es)', input()):
             RECIPE = new_recipe
             print("Okay, the recipe has been updated!")
+            continue
         else:
             print("Okay, let\'s keep the original recipe.")
+            continue
 
     # transformation to healthy
     healthy_transform_pattern = '(healthy|healthier)'
@@ -303,8 +309,10 @@ while flag:
         if re.match('(Y|y|(Y|y)es)', input()):
             RECIPE = new_recipe
             print("Okay, the recipe has been updated!")
+            continue
         else:
             print("Okay, let\'s keep the original recipe.")
+            continue
 
     # transformation to vegan/vegetarian
     veg_transform_pattern = '(vegetarian|vegan)'
@@ -325,8 +333,10 @@ while flag:
         if re.match('(Y|y|(Y|y)es)', input()):
             RECIPE = new_recipe
             print("Okay, the recipe has been updated!")
+            continue
         else:
             print("Okay, let\'s keep the original recipe.")
+            continue
     
     # if it's a vague How to
     vague_pattern = '(H|h)ow do I do that'
