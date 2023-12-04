@@ -311,7 +311,7 @@ while flag:
             print("No method found, sorry! If you add more detail I may be able to help.")
         else:
             for method in methods:
-                print("Here is how to do " + method + ": " + "https://google.com/search?q=how+do+I+" + method)
+                print("Here is how to " + method + ": " + "https://google.com/search?q=how+do+I+" + method)
 
     # if it's a Google question
     google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
