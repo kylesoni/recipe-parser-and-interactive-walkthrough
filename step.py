@@ -14,6 +14,7 @@ class Step:
         self.methods = []
         self.time = {"Hard" : "", "Soft" : ""}
         self.settings = {"Stove" : "", "Oven" : ""}
+        self.current_temp = ""
 
         self.get_ingredients(r_ingredients)
         self.get_tools()

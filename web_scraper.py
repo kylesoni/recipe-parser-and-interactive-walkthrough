@@ -160,6 +160,25 @@ while flag:
             if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)):
                 print("Ingredient not found")
 
+    # if it's a settings question
+    temp_query_pattern = "((W|w)hat is the temperature|(W|w)hat is temperature|(W|w)hat is the temp|(W|w)hat is temp)"
+    query = re.match(temp_query_pattern, user_input)
+    if query:
+        if RECIPE.steps[RECIPE.current_step].settings["Oven"] != "":
+            print("The temperature should be: " + RECIPE.steps[RECIPE.current_step].settings["Oven"])
+        elif RECIPE.steps[RECIPE.current_step].current_temp != "":
+            print("The temperature should be: " + RECIPE.steps[RECIPE.current_step].current_temp)
+        else:
+            print("Temperature not found")
+
+    heat_query_pattern = "((W|w)hat is the heat setting|(W|w)hat is heat)"
+    query = re.match(heat_query_pattern, user_input)
+    if query:
+        if RECIPE.steps[RECIPE.current_step].settings["Stove"] != "":
+            print("The stove settings should be: " + RECIPE.steps[RECIPE.current_step].settings["Stove"])
+        else:
+            print("Heat setting not found")
+
     # if it's a time question
     time_query_pattern = "((H|h)ow long|(W|w)hat is the time needed for)"
     query = re.search(time_query_pattern, user_input)
@@ -285,7 +304,7 @@ while flag:
     
     # if it's a Google question
     google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
-    other_queries = '(prep|tool|vegetarian|vegan|kosher|health|time)'
+    other_queries = '(prep|tool|vegetarian|vegan|kosher|health|time|temperature|setting|heat)'
     query = re.match(google_query_pattern, user_input)
     if query:
         if re.search(other_queries, user_input):
