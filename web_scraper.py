@@ -47,8 +47,8 @@ elif user_input.__contains__('2'):
 else:
     print("Sorry, I didn't get that. Can you input a selection of 1 or 2?")
 
-i = True
-while i:
+flag = True
+while flag:
     print("What would you like to do now?")
     user_input = input()
     user_input = re.sub(r'[,.!?@#$%^&*_~]', '', user_input)
@@ -160,6 +160,19 @@ while i:
             if j == (len(RECIPE.steps[RECIPE.current_step].ingredients)):
                 print("Ingredient not found")
 
+    # if it's a time question
+    time_query_pattern = "((H|h)ow long|(W|w)hat is the time needed for)"
+    query = re.search(time_query_pattern, user_input)
+    if query:
+        if RECIPE.steps[RECIPE.current_step].time["Hard"] != "" and RECIPE.steps[RECIPE.current_step].time["Soft"] != "":
+            print("The time for this step is: " + RECIPE.steps[RECIPE.current_step].time["Hard"] + " or " + RECIPE.steps[RECIPE.current_step].time["Soft"])
+        elif RECIPE.steps[RECIPE.current_step].time["Hard"] != "":
+            print("The time for this step is: " + RECIPE.steps[RECIPE.current_step].time["Hard"])
+        elif RECIPE.steps[RECIPE.current_step].time["Soft"] != "":
+            print("The time for this step is: " + RECIPE.steps[RECIPE.current_step].time["Soft"])
+        else:
+            print("Time not found")
+
     # transformation to vegan/vegetarian
     veg_transform_pattern = '(vegetarian|vegan)'
     query = re.match(veg_transform_pattern, user_input)
@@ -175,7 +188,7 @@ while i:
     
     # if it's a Google question
     google_query_pattern = '((W|w)hat is ([^\?]*)|(W|w)hat are ([^\?]*)|(H|h)ow do I ([^\?]*))'
-    other_queries = '(prep|vegetarian|vegan)'
+    other_queries = '(prep|vegetarian|vegan|tools)'
     query = re.match(google_query_pattern, user_input)
     if query:
         if re.search(other_queries, user_input):

@@ -154,6 +154,14 @@ class Step:
                             if t.text not in settings_candidates:
                                 settings_candidates.append(token.text)
 
+        common_stove_settings = ["low", "medium", "high", "medium-low", "low-medium", "medium-high", "high-medium"]
+        if len(settings_candidates) <= 0:
+            for word in self.text.split():
+                word = word.lower()
+                word = re.sub(r'[.,]', '', word)
+                if word in common_stove_settings:
+                    settings_candidates.append(word)
+
         text_words = re.sub(r'[^\w\s]', '', self.text).split()
         for i, word in enumerate(text_words):
             if word in settings_candidates:
