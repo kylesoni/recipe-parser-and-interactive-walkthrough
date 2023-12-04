@@ -28,11 +28,11 @@ class Ingredient:
     def get_amount(self, ingredient_info):
         ingredient_words = ingredient_info.split()
         amount_candidate = [ingredient_words[0], ingredient_words[1]]
-        if not re.search('^[a-zA-Z,.?]+$', amount_candidate[0]) and "(" not in amount_candidate[0] and ")" not in amount_candidate[0]:
+        if not re.search('^[a-zA-Z,.?-]+$', amount_candidate[0]) and "(" not in amount_candidate[0] and ")" not in amount_candidate[0]:
             self.amount = amount_candidate[0]
-            if not re.search('^[a-zA-Z,.?]+$', amount_candidate[1]) and "(" not in amount_candidate[1] and ")" not in amount_candidate[1]:
+            if not re.search('^[a-zA-Z,.?-]+$', amount_candidate[1]) and "(" not in amount_candidate[1] and ")" not in amount_candidate[1]:
                 self.amount += " " + amount_candidate[1]
-        elif not re.search('^[a-zA-Z,.?]+$', amount_candidate[1]) and "(" not in amount_candidate[1] and ")" not in amount_candidate[1]:
+        elif not re.search('^[a-zA-Z,.?-]+$', amount_candidate[1]) and "(" not in amount_candidate[1] and ")" not in amount_candidate[1]:
             self.amount = amount_candidate[1]
         if re.search("\(([^)]+)\)", ingredient_info):
             self.amount_clar = re.search("\(([^)]+)\)", ingredient_info).group(0)
@@ -237,6 +237,9 @@ common_descriptor = {
     'skinless' : 'skinless',
     'drained' : 'drained',
     'lean' : 'lean',
+    'unsalted' : 'unsalted',
+    'bone-in' : 'bone-in',
+    'skin-on' : 'skin-on',
 
     "acidic" : "acidic",
     "acrid" : "acrid",
@@ -381,7 +384,6 @@ common_descriptor = {
     "full-flavored" : "full-flavored",
     "gamy" : "gamy",
     "garlicky" : "garlicky",
-    "garnish" : "garnish",
     "gastric" : "gastric",
     "gingery" : "gingery",
     "glazed" : "glazed",
@@ -452,7 +454,6 @@ common_descriptor = {
     "microwave" : "microwave",
     "mild" : "mild",
     "milky" : "milky",
-    "minced" : "minced",
     "minty" : "minty",
     "mixed" : "mixed",
     "mixture" : "mixture",

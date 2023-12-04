@@ -41,5 +41,5 @@ test_recipe = Recipe(ingredient_list, steps)
 # print(test_recipe.progress_step().text)
 # print(test_recipe.ingredients[-1].ingredient)
 
-veggie_recipe = transformations.meat_to_vegan(test_recipe)
+veggie_recipe = transformations.make_healthy(test_recipe)
 veggie_recipe.test_ingredients()

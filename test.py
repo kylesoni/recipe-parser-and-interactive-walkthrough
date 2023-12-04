@@ -14,3 +14,5 @@ for token in doc:
     pass
 
 #print(re.search("\(([^)]+)\)", "1 (16 ounce) bottle Italian dressing (such as Olive Garden℠ Signature Italian Dressing)").group(0))
+
+print(re.search('^[a-zA-Z,.?-]+$', "skin-on"))

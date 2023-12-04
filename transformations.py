@@ -96,10 +96,43 @@ def make_kosher(recipe):
     print("")
     return Recipe(new_ings, new_steps)
 
+def make_healthy(recipe):
+    new_ings = []
+    un_healthy = []
+    ing_list = recipe.ingredients
+    for ing in ing_list:
+        health = ""
+        ing_words = ing.ingredient.lower().split()
+        for word in ing_words:
+            if word in make_healthy_words:
+                un_healthy.append(word)
+                health = make_healthy_words[word]
+                print("Changing: " + word + " -> " + health)
+        if health != "":
+            new_ings.append(ing.amount + " " + ing.unit + " " + health)
+        else:
+            new_ings.append(ing.raw)
+    new_steps = []
+    step_list = recipe.steps
+    for step in step_list:
+        new_text = step.text
+        for word in un_healthy:
+            if word in new_text:
+                new_text = re.sub(word, make_healthy_words[word], new_text)
+        new_steps.append(new_text)
+    print("")
+    return Recipe(new_ings, new_steps)
+
+
 meat_to_vegetarian_words = {
     "beef" : "beyond meat",
     "steak" : "tofu",
     "veal" : "tofu",
+
+    "pork" : "tofu",
+    "bacon" : "tofu",
+    "sausage" : "tofu",
+    "ham" : "tofu", 
 
     "chicken" : "tofu",
     "duck" : "tofu",
@@ -152,6 +185,11 @@ meat_to_vegan_words = {
     "steak" : "tofu",
     "veal" : "tofu",
 
+    "pork" : "tofu",
+    "bacon" : "tofu",
+    "sausage" : "tofu",
+    "ham" : "tofu", 
+
     "chicken" : "tofu",
     "duck" : "tofu",
     "turkey" : "tofu",
@@ -200,12 +238,11 @@ meat_to_vegan_words = {
     "milk" : "almond milk",
     "butter" : "margarine",
     "egg" : "vegan egg",
-    "eggs" : "vegan eggs"
+    "eggs" : "vegan eggs",
     
     "cream" : "vegan cream",
     "yogurt" : "vegan yogurt",
     "greek yogurt" : "vegan yogurt",
-    ""
 
     "cheese" : "vegan cheese",
     "ice cream" : "sorbetto",
@@ -221,9 +258,63 @@ cheeses = {
 }
 
 make_kosher_words = {
+    "butter" : "margarine",
+    "chocolate" : "carob",
+    "frosting" : "marshmallow fluff",
+    "yogurt" : "vegan yogurt",
+    "cream" : "coconut milk",
+    "milk" : "almond milk",
 
+    "sirloin" : "beyond meat",
+    "flank" : "beyond meat",
+    "round" : "beyond meat",
+    "rump cap" : "beyond meat",
+    "shank" : "beyond meat",
+
+    "pork" : "tofu",
+    "bacon" : "tofu",
+    "sausage" : "tofu",
+    "ham" : "tofu", 
+
+    "crab" : "imitation crab",
+    "shrimp" : "shitake mushrooms",
+    "oysters" : "mushrooms",
+    "clam" : "mushrooms",
+    "mussel" : "mushrooms",
+    "crawdad" : "mushrooms",
+    "scallop" : "mushrooms",
+    "lobster" : "mushrooms",
+
+    "crickets" : "mushrooms",
+    "grasshoppers" : "mushrooms",
+    "eagles" : "tofu", 
+    "owls" : "tofu", 
+    "hawks" : "tofu",
+    "gulls" : "tofu"
 }
 
 make_healthy_words = {
+    "beef" : "tofu",
+    "steak" : "tofu",
+    "veal" : "tofu",
 
+    "pork" : "tofu",
+    "bacon" : "tofu",
+    "sausage" : "tofu",
+    "ham" : "tofu",
+
+    "oil" : "avocado oil",
+    "fat" : "avocado oil",
+    "butter" : "mashed avocado",
+
+    "broth" : "vegetable broth",
+
+    "milk" : "skim milk",
+    "cheese" : "nutritional yeast",
+
+    "sugar" : "stevia",
+    
+    "refried" : "black beans",
+
+    "potato" : "sweet potato",
 }
