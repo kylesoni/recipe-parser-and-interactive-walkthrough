@@ -1,10 +1,10 @@
-# cs337-project2
+# Recipe Parser and Walkthrough
 
 Group composed of Kyle Soni and Anges Vu
 https://github.com/kylesoni/cs337-project2
 
 ## To run:
-- Run web_scraper.py for interface and do similar things to video
+- Run web_scraper.py for interface and do similar things to this [video](https://github.com/kylesoni/recipe-parser-and-interactive-walkthrough/blob/main/cs337.mp4)
 - Run main.py after changing url to get direct output from parsing
 
 ## Requirements:
